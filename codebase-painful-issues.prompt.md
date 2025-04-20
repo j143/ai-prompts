@@ -40,6 +40,26 @@ graph TD
     H --> G
 ```
 
+#### Wrong Way:
+```python
+# Overwrites the entire file without backup
+with open("config.py", 'w') as file:
+    file.write("NEW CONFIG")
+```
+
+#### Right Way:
+```python
+# Creates a backup before making changes
+import os
+
+def update_code(file_path, new_code):
+    backup_path = f"{file_path}.backup"
+    if os.path.exists(file_path):
+        os.rename(file_path, backup_path)
+    with open(file_path, 'w') as file:
+        file.write(new_code)
+```
+
 ## 2. Creating New Code Instead of Modifying Existing Code
 ### Issue:
 AI duplicates functionality instead of reusing existing code.
@@ -70,6 +90,26 @@ graph TD
     E --> F[Finish]
 ```
 
+#### Wrong Way:
+```python
+# Creates a duplicate function instead of reusing existing one
+def calculate_sum(a, b):
+    return a + b
+
+def add_numbers(a, b):
+    return a + b
+```
+
+#### Right Way:
+```python
+# Reuses the existing function
+def calculate_sum(a, b):
+    return a + b
+
+# Use calculate_sum wherever needed
+result = calculate_sum(2, 3)
+```
+
 ## 3. Ignoring Dependencies or Context
 ### Issue:
 AI removes imports or breaks interdependent modules.
@@ -98,6 +138,20 @@ graph TD
     E --> F[Finish]
 ```
 
+#### Wrong Way:
+```python
+# Removes imports without checking usage
+# import requests
+response = requests.get("https://example.com")
+```
+
+#### Right Way:
+```python
+# Ensures all dependencies are installed and imported
+import requests
+response = requests.get("https://example.com")
+```
+
 ## 4. Overcomplicating Simple Tasks
 ### Issue:
 AI generates overly complex solutions.
@@ -123,6 +177,20 @@ graph TD
     E --> F[Finish]
 ```
 
+#### Wrong Way:
+```python
+# Overcomplicated solution
+result = 0
+for x in range(10):
+    result += x**2
+```
+
+#### Right Way:
+```python
+# Simplified solution
+result = sum(x**2 for x in range(10))
+```
+
 ## 5. Misinterpreting Instructions
 ### Issue:
 AI misunderstands vague instructions.
@@ -145,6 +213,22 @@ graph TD
     D --> C
     C --> E[Test and validate]
     E --> F[Finish]
+```
+
+#### Wrong Way:
+```python
+# Misinterprets vague instructions
+# "Fix the bug in the function."
+def buggy_function():
+    pass
+```
+
+#### Right Way:
+```python
+# Implements clear instructions
+# "Fix the IndexError in calculate_sum when input is empty."
+def calculate_sum(numbers):
+    return sum(numbers) if numbers else 0
 ```
 
 ## 6. Lack of Testing
@@ -175,6 +259,23 @@ graph TD
     G --> C
 ```
 
+#### Wrong Way:
+```python
+# No tests for new functionality
+def add(a, b):
+    return a + b
+```
+
+#### Right Way:
+```python
+# Adds tests for new functionality
+def add(a, b):
+    return a + b
+
+assert add(2, 3) == 5
+assert add(-1, 1) == 0
+```
+
 ## 7. Ignoring Coding Standards
 ### Issue:
 AI generates code that violates style guides.
@@ -199,6 +300,24 @@ graph TD
     B -->|Issues found| D[Fix issues]
     D --> C
     C --> E[Finish]
+```
+
+#### Wrong Way:
+```python
+# Violates coding standards
+x=  42
+
+def foo ( ):
+    print( "Hello" )
+```
+
+#### Right Way:
+```python
+# Adheres to coding standards
+x = 42
+
+def foo():
+    print("Hello")
 ```
 
 ## 8. Overwriting or Deleting Critical Files
@@ -228,6 +347,24 @@ graph TD
     E --> F[Finish]
 ```
 
+#### Wrong Way:
+```python
+# Deletes a file without backup
+import os
+os.remove("critical_config.yaml")
+```
+
+#### Right Way:
+```python
+# Creates a backup before deleting
+import os
+
+def safe_delete(file_path):
+    if os.path.exists(file_path):
+        os.rename(file_path, f"{file_path}.backup")
+        os.remove(file_path)
+```
+
 ## 9. Debugging AI-Generated Code
 ### Issue:
 AI code lacks comments or uses unconventional patterns.
@@ -252,6 +389,21 @@ graph TD
     C --> E[Identify issues]
     E --> F[Fix and validate]
     F --> G[Finish]
+```
+
+#### Wrong Way:
+```python
+# No comments or documentation
+def calculate_area(radius):
+    return 3.14 * radius ** 2
+```
+
+#### Right Way:
+```python
+# Adds comments for clarity
+def calculate_area(radius):
+    # Calculate the area of a circle given its radius
+    return 3.14 * radius ** 2
 ```
 
 ## 10. Lack of Workflow Integration
@@ -280,4 +432,24 @@ graph TD
     D --> C
     C --> E[Test and validate]
     E --> F[Finish]
+```
+
+#### Wrong Way:
+```python
+# Skips testing before deployment
+def deploy():
+    print("Deploying application...")
+```
+
+#### Right Way:
+```python
+# Integrates testing into the deployment process
+import subprocess
+
+def deploy():
+    result = subprocess.run(["pytest"], check=False)
+    if result.returncode == 0:
+        print("Tests passed. Deploying application...")
+    else:
+        print("Tests failed. Aborting deployment.")
 ```
